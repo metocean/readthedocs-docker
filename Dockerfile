@@ -29,4 +29,4 @@ RUN echo "ALLOW_PRIVATE_REPOS=True" > \
 RUN echo "ACCOUNT_EMAIL_VERIFICATION='none'" >> \
     /www/readthedocs/settings/local_settings.py # disable email verification
 
-CMD ["cd /www && ./manage.py runserver 0.0.0.0:8000"]
+CMD ["/www/manage.py", "runserver", "0.0.0.0:8000"]
