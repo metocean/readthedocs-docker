@@ -1,8 +1,8 @@
 FROM ubuntu:14.04
 
 RUN apt-get update && \ 
-	apt-get upgrade -y && \
-	apt-get install -y wget curl locales git python python-pip python-dev \
+    apt-get upgrade -y && \
+    apt-get install -y wget curl locales git python python-pip python-dev \
     libffi-dev libssl-dev libxml2-dev libxslt-dev libxslt1-dev zlib1g-dev \
     openjdk-7-jdk libpq-dev libncurses5-dev libsasl2-dev gcc python3-dev \
     python3-pip
@@ -25,7 +25,7 @@ RUN ./manage.py migrate && \
 RUN pip install -U virtualenv
 
 RUN echo "ALLOW_PRIVATE_REPOS=True" > \
-	/www/readthedocs/settings/local_settings.py # private repo
+    /www/readthedocs/settings/local_settings.py # private repo
 RUN echo "ACCOUNT_EMAIL_VERIFICATION='none'" >> \
     /www/readthedocs/settings/local_settings.py # disable email verification
 
