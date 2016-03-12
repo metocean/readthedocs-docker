@@ -20,6 +20,7 @@ RUN ./manage.py migrate && \
 # RUN pip install -U virtualenv # it'll cause a bug if we don't upgrade
 
 # private repo
-RUN echo "ALLOW_PRIVATE_REPOS=True" > /www/readthedocs/settings/local_settings.py
+RUN echo "ALLOW_PRIVATE_REPOS=True\nACCOUNT_EMAIL_VERIFICATION='none'" > \
+    /www/readthedocs/settings/local_settings.py
 
 CMD ["cd /www && ./manage.py runserver 0.0.0.0:8000"]
