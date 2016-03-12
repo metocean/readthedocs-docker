@@ -3,14 +3,17 @@ Docker build for ReadTheDocs (RTD)
 
 This repository provides Dockerfile for [Read The Docs][0] 
 
+### Quick Start
+`docker run -d -p 8000:8000 suanmeiguo/readthedocs`
+
 ### Status
-Built images are uploaded to [index.docker.io][1]
+Built images are uploaded to [docker hub][1]
 
 ### Usage:
 
  - Install Docker: [http://docs.docker.io/][2]
  - Execute
- `docker run -d --name ReadTheDocs -p 8000:8000 suanmeiguo/readthedocs`
+ `docker run -d -p 8000:8000 suanmeiguo/readthedocs`
  - Browse [http://&lt;your server ip address&gt;:8000/][3]
  - username/password for admin:
    - `username` is `admin`
