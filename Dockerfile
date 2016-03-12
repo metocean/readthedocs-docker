@@ -15,7 +15,9 @@ RUN pip install -r requirements.txt && \
     easy_install3 pip && pip3 install virtualenv
 
 RUN ./manage.py migrate && \
-    echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@localhost', 'admin')" | ./manage.py shell && \
+    echo "from django.contrib.auth.models import User; \
+    User.objects.create_superuser('admin', 'admin@localhost', 'admin')" | \
+    ./manage.py shell && \
     echo "yes" | ./manage.py collectstatic && \
     ./manage.py loaddata test_data
 
