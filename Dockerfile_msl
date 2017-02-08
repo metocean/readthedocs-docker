@@ -1,0 +1,16 @@
+FROM suanmeiguo/readthedocs
+
+COPY .ssh /home/metocean/.ssh
+RUN  chmod 700 /home/metocean/.ssh &&\
+     chmod 600 /home/metocean/.ssh/id_rsa
+
+RUN apt-get -qq update && \
+    apt-get -y -qq upgrade && \
+    apt-get install -y -qq \
+        python-matplotlib libproj-dev libgeos-dev cython python-pyproj gfortran \
+		texlive texlive-latex-extra language-pack-en\
+		libfreetype6-dev libpng12-dev && \
+    apt-get clean
+
+
+RUN ln -s /usr/include/freetype2/ft2build.h /usr/include/
