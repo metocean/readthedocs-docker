@@ -4,7 +4,7 @@ RUN yum -y update && \
     yum -y upgrade -y && \
     yum -y install \
     proj proj-devel tkinter libffi-dev libssl-dev libxml2-devel libxslt-devel zlib-devel \
-	texlive texlive-* cython python-pyproj gfortran && \
+	texlive*  language-pack-en cython python-pyproj gfortran  && \
     yum clean all
 
 # Install proj from source
@@ -32,26 +32,16 @@ RUN ./manage.py migrate && \
 # Fix a bug in readthedocs
 RUN pip install -U virtualenv
 
-RUN echo "ALLOW_PRIVATE_REPOS=True" > \
-    /www/readthedocs/settings/local_settings.py # private repo
-RUN echo "ACCOUNT_EMAIL_VERIFICATION='none'" >> \
-    /www/readthedocs/settings/local_settings.py # disable email verification
+# RUN echo "ALLOW_PRIVATE_REPOS=True" > \
+#     /www/readthedocs/settings/local_settings.py # private repo
+# RUN echo "ACCOUNT_EMAIL_VERIFICATION='none'" >> \
+#     /www/readthedocs/settings/local_settings.py # disable email verification
 
 COPY .ssh /root/.ssh
 RUN  chmod 700 /root/.ssh &&\
-     chmod 600 /root/.ssh/id_rsa 
-
-RUN yum -y install perl-Digest-MD5 perl-Tk
-
-RUN rm -rf /usr/local/texlive/2016 &&\
-	rm -rf ~/.texlive2016 
-
-RUN mkdir /tmp/tex && cd /tmp/tex &&\
-    wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
-
-RUN tar -xvf install-tl-unx.tar.gz &&\
-    ./install-tl
+     chmod 600 /root/.ssh/id_rsa
 
 
+RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 
 CMD ["/www/manage.py", "runserver", "0.0.0.0:8000"]
