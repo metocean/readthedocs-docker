@@ -1,13 +1,11 @@
 FROM metocean/ops-base
 
-RUN apt-get update && \ 
-    apt-get upgrade -y && \
-    apt-get install -y 
-    libffi-dev libssl-dev libxml2-dev libxslt-dev libxslt1-dev zlib1g-dev \
-	texlive texlive-latex-extra language-pack-en\
-	python-matplotlib libproj-dev libgeos-dev cython python-pyproj gfortran \
-	libfreetype6-dev libpng12-dev && \
-    apt-get clean
+RUN yum -y update && \ 
+    yum -y upgrade -y && \
+    yum -y install \
+    proj proj-devel tkinter libffi-dev libssl-dev libxml2-devel libxslt-devel zlib-devel \
+	texlive texlive-* cython python-pyproj gfortran && \
+    yum clean all
 
 # Install proj from source
 RUN cd /tmp &&\
@@ -22,9 +20,7 @@ RUN cd /tmp &&\
 RUN mkdir /www/ && git clone https://github.com/rtfd/readthedocs.org.git /www
 WORKDIR /www
 
-RUN pip install --upgrade pip && ln -sf /usr/local/bin/pip /usr/bin/pip
-RUN pip install -r requirements.txt && \
-    easy_install3 pip && pip3 install virtualenv
+RUN pip install -r requirements.txt
 
 RUN ./manage.py migrate && \
     echo "from django.contrib.auth.models import User; \
@@ -40,5 +36,22 @@ RUN echo "ALLOW_PRIVATE_REPOS=True" > \
     /www/readthedocs/settings/local_settings.py # private repo
 RUN echo "ACCOUNT_EMAIL_VERIFICATION='none'" >> \
     /www/readthedocs/settings/local_settings.py # disable email verification
+
+COPY .ssh /root/.ssh
+RUN  chmod 700 /root/.ssh &&\
+     chmod 600 /root/.ssh/id_rsa 
+
+RUN yum -y install perl-Digest-MD5 perl-Tk
+
+RUN rm -rf /usr/local/texlive/2016 &&\
+	rm -rf ~/.texlive2016 
+
+RUN mkdir /tmp/tex && cd /tmp/tex &&\
+    wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+
+RUN tar -xvf install-tl-unx.tar.gz &&\
+    ./install-tl
+
+
 
 CMD ["/www/manage.py", "runserver", "0.0.0.0:8000"]
