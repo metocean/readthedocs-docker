@@ -4,7 +4,7 @@ RUN yum -y update && \
     yum -y upgrade -y && \
     yum -y install \
     proj proj-devel tkinter libffi-dev libssl-dev libxml2-devel libxslt-devel zlib-devel \
-	texlive*  language-pack-en cython python-pyproj gfortran  && \
+	language-pack-en cython python-pyproj gfortran perl-Tk perl-Digest-MD5 && \
     yum clean all
 
 # Install proj from source
@@ -41,7 +41,17 @@ COPY .ssh /root/.ssh
 RUN  chmod 700 /root/.ssh &&\
      chmod 600 /root/.ssh/id_rsa
 
+# Manually install texlive as centos7 has a rubbish latex install
+RUN  mkdir /tmp/tex
+COPY texlive.profile /tmp/tex
+RUN cd /tmp/tex && wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz &&\
+    tar -xvf install-tl-unx.tar.gz && rm install-tl-unx.tar.gz &&\
+    cd install-tl* &&\
+    ./install-tl --profile=../texlive.profile &&\
+    echo 'PATH=/usr/local/texlive/2016/bin/x86_64-linux/:$PATH' >> /etc/bashrc &&\
+    cd && rm -fr /tmp/tex
 
-RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+RUN ln -s /usr/local/texlive/2016/bin/x86_64-linux/pdflatex /usr/local/bin/ &&
+    ln -s /usr/local/texlive/2016/bin/x86_64-linux/mkindex /usr/local/bin/
 
 CMD ["/www/manage.py", "runserver", "0.0.0.0:8000"]
