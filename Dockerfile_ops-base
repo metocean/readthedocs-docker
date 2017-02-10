@@ -51,7 +51,7 @@ RUN cd /tmp/tex && wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-
     echo 'PATH=/usr/local/texlive/2016/bin/x86_64-linux/:$PATH' >> /etc/bashrc &&\
     cd && rm -fr /tmp/tex
 
-RUN ln -s /usr/local/texlive/2016/bin/x86_64-linux/pdflatex /usr/local/bin/ &&
+RUN ln -s /usr/local/texlive/2016/bin/x86_64-linux/pdflatex /usr/local/bin/ &&\
     ln -s /usr/local/texlive/2016/bin/x86_64-linux/mkindex /usr/local/bin/
 
 CMD ["/www/manage.py", "runserver", "0.0.0.0:8000"]
